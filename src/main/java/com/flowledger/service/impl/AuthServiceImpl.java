@@ -1,4 +1,4 @@
-package com.flowledger.service.iml;
+package com.flowledger.service.impl;
 
 import com.flowledger.dto.request.RegisterRequest;
 import com.flowledger.dto.response.UserResponse;
@@ -6,14 +6,14 @@ import com.flowledger.entity.User;
 import com.flowledger.exception.EmailAlreadyExistsException;
 import com.flowledger.mapper.UserMapper;
 import com.flowledger.repository.UserRepository;
-import com.flowledger.service.UserService;
+import com.flowledger.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
