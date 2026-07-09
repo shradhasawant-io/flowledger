@@ -4,6 +4,7 @@ import com.flowledger.dto.request.CreateTransactionRequest;
 import com.flowledger.dto.response.TransactionResponse;
 import com.flowledger.entity.Transaction;
 import com.flowledger.entity.User;
+import com.flowledger.exception.ResourceNotFoundException;
 import com.flowledger.mapper.TransactionMapper;
 import com.flowledger.repository.TransactionRepository;
 import com.flowledger.service.AuthenticatedUserService;
@@ -48,5 +49,19 @@ public class TransactionServiceImpl implements TransactionService {
                 .stream()
                 .map(transactionMapper::toResponse)
                 .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public TransactionResponse getTransactionById(Long id) {
+
+        User currentUser = authenticatedUserService.getCurrentUser();
+
+        Transaction transaction = transactionRepository
+                .findByIdAndUser(id, currentUser)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Transaction not found"));
+
+        return transactionMapper.toResponse(transaction);
     }
 }

@@ -53,4 +53,20 @@ public class TransactionController {
                         .build()
         );
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<TransactionResponse>> getTransactionById(
+            @PathVariable Long id) {
+
+        TransactionResponse response =
+                transactionService.getTransactionById(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.<TransactionResponse>builder()
+                        .success(true)
+                        .message("Transaction fetched successfully")
+                        .data(response)
+                        .build()
+        );
+    }
 }

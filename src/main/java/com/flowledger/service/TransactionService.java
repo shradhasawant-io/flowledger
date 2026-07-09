@@ -9,6 +9,8 @@ public interface TransactionService {
 
     List<TransactionResponse> getMyTransactions();
 
+    TransactionResponse getTransactionById(Long id);
+
     TransactionResponse createTransaction(
             CreateTransactionRequest request
     );
