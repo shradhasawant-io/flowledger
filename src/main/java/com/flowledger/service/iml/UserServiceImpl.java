@@ -3,6 +3,7 @@ package com.flowledger.service.iml;
 import com.flowledger.dto.request.RegisterRequest;
 import com.flowledger.dto.response.UserResponse;
 import com.flowledger.entity.User;
+import com.flowledger.exception.EmailAlreadyExistsException;
 import com.flowledger.mapper.UserMapper;
 import com.flowledger.repository.UserRepository;
 import com.flowledger.service.UserService;
@@ -21,7 +22,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse register(RegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new EmailAlreadyExistsException("Email already exists");
         }
 
         User user = UserMapper.toEntity(request);
