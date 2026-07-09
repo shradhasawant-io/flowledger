@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
@@ -33,5 +35,18 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction saved = transactionRepository.save(transaction);
 
         return transactionMapper.toResponse(saved);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TransactionResponse> getMyTransactions() {
+
+        User currentUser = authenticatedUserService.getCurrentUser();
+
+        return transactionRepository
+                .findByUserOrderByTransactionDateDesc(currentUser)
+                .stream()
+                .map(transactionMapper::toResponse)
+                .toList();
     }
 }

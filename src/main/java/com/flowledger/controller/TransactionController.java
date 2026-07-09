@@ -9,10 +9,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/transactions")
@@ -37,5 +36,21 @@ public class TransactionController {
                                 .data(response)
                                 .build()
                 );
+    }
+
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<TransactionResponse>>> getMyTransactions() {
+
+        List<TransactionResponse> response =
+                transactionService.getMyTransactions();
+
+        return ResponseEntity.ok(
+                ApiResponse.<List<TransactionResponse>>builder()
+                        .success(true)
+                        .message("Transactions fetched successfully")
+                        .data(response)
+                        .build()
+        );
     }
 }
