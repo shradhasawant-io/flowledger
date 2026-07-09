@@ -1,7 +1,9 @@
 package com.flowledger.controller;
 
+import com.flowledger.dto.request.LoginRequest;
 import com.flowledger.dto.request.RegisterRequest;
 import com.flowledger.dto.response.ApiResponse;
+import com.flowledger.dto.response.LoginResponse;
 import com.flowledger.dto.response.UserResponse;
 import com.flowledger.service.AuthService;
 import jakarta.validation.Valid;
@@ -31,5 +33,25 @@ public class AuthController {
                                 .data(response)
                                 .build()
                 );
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<LoginResponse>> login(
+            @Valid @RequestBody LoginRequest request) {
+
+        LoginResponse response = authService.login(request);
+
+        return ResponseEntity.ok(
+                ApiResponse.<LoginResponse>builder()
+                        .success(true)
+                        .message("Login successful")
+                        .data(response)
+                        .build()
+        );
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "JWT Authentication Working";
     }
 }
