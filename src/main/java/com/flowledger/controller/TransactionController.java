@@ -87,4 +87,18 @@ public class TransactionController {
                         .build()
         );
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteTransaction(
+            @PathVariable Long id) {
+
+        transactionService.deleteTransaction(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .success(true)
+                        .message("Transaction deleted successfully")
+                        .build()
+        );
+    }
 }

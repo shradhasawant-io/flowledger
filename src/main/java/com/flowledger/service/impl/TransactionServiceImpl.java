@@ -85,4 +85,18 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactionMapper.toResponse(updated);
     }
+
+    @Override
+    @Transactional
+    public void deleteTransaction(Long id) {
+
+        User currentUser = authenticatedUserService.getCurrentUser();
+
+        Transaction transaction = transactionRepository
+                .findByIdAndUser(id, currentUser)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Transaction not found"));
+
+        transactionRepository.delete(transaction);
+    }
 }

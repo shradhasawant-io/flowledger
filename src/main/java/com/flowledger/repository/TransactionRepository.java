@@ -16,4 +16,8 @@ public interface TransactionRepository
 
     Optional<Transaction> findByIdAndUser(Long id, User user);
 
+    long deleteByIdAndUser(Long id, User user);
+
+    //void deleteByIdAndUser(Long id, User user);
+
 }
