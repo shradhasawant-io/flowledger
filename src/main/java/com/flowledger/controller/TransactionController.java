@@ -1,6 +1,7 @@
 package com.flowledger.controller;
 
 import com.flowledger.dto.request.CreateTransactionRequest;
+import com.flowledger.dto.request.UpdateTransactionRequest;
 import com.flowledger.dto.response.ApiResponse;
 import com.flowledger.dto.response.TransactionResponse;
 import com.flowledger.service.TransactionService;
@@ -65,6 +66,23 @@ public class TransactionController {
                 ApiResponse.<TransactionResponse>builder()
                         .success(true)
                         .message("Transaction fetched successfully")
+                        .data(response)
+                        .build()
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<TransactionResponse>> updateTransaction(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateTransactionRequest request) {
+
+        TransactionResponse response =
+                transactionService.updateTransaction(id, request);
+
+        return ResponseEntity.ok(
+                ApiResponse.<TransactionResponse>builder()
+                        .success(true)
+                        .message("Transaction updated successfully")
                         .data(response)
                         .build()
         );

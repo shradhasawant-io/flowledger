@@ -1,6 +1,7 @@
 package com.flowledger.service;
 
 import com.flowledger.dto.request.CreateTransactionRequest;
+import com.flowledger.dto.request.UpdateTransactionRequest;
 import com.flowledger.dto.response.TransactionResponse;
 
 import java.util.List;
@@ -13,5 +14,10 @@ public interface TransactionService {
 
     TransactionResponse createTransaction(
             CreateTransactionRequest request
+    );
+
+    TransactionResponse updateTransaction(
+            Long id,
+            UpdateTransactionRequest request
     );
 }

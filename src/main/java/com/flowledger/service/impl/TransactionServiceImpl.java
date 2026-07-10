@@ -1,6 +1,7 @@
 package com.flowledger.service.impl;
 
 import com.flowledger.dto.request.CreateTransactionRequest;
+import com.flowledger.dto.request.UpdateTransactionRequest;
 import com.flowledger.dto.response.TransactionResponse;
 import com.flowledger.entity.Transaction;
 import com.flowledger.entity.User;
@@ -63,5 +64,25 @@ public class TransactionServiceImpl implements TransactionService {
                         new ResourceNotFoundException("Transaction not found"));
 
         return transactionMapper.toResponse(transaction);
+    }
+
+    @Override
+    @Transactional
+    public TransactionResponse updateTransaction(
+            Long id,
+            UpdateTransactionRequest request) {
+
+        User currentUser = authenticatedUserService.getCurrentUser();
+
+        Transaction transaction = transactionRepository
+                .findByIdAndUser(id, currentUser)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Transaction not found"));
+
+        transactionMapper.updateEntity(transaction, request);
+
+        Transaction updated = transactionRepository.save(transaction);
+
+        return transactionMapper.toResponse(updated);
     }
 }

@@ -1,6 +1,7 @@
 package com.flowledger.mapper;
 
 import com.flowledger.dto.request.CreateTransactionRequest;
+import com.flowledger.dto.request.UpdateTransactionRequest;
 import com.flowledger.dto.response.TransactionResponse;
 import com.flowledger.entity.Transaction;
 import org.springframework.stereotype.Component;
@@ -33,5 +34,17 @@ public class TransactionMapper {
                 .transactionDate(transaction.getTransactionDate())
                 .notes(transaction.getNotes())
                 .build();
+    }
+
+    public void updateEntity(
+            Transaction transaction,
+            UpdateTransactionRequest request) {
+
+        transaction.setTitle(request.getTitle());
+        transaction.setAmount(request.getAmount());
+        transaction.setType(request.getType());
+        transaction.setPaymentMethod(request.getPaymentMethod());
+        transaction.setTransactionDate(request.getTransactionDate());
+        transaction.setNotes(request.getNotes());
     }
 }
