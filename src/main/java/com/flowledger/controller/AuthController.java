@@ -52,6 +52,6 @@ public class AuthController {
 
     @GetMapping("/test")
     public String test() {
-        return "JWT Authentication Working";
+        throw new RuntimeException("Testing Global Exception Handler");
     }
 }
