@@ -1,7 +1,5 @@
 package com.flowledger.security;
 
-import com.flowledger.entity.User;
-import com.flowledger.exception.ResourceNotFoundException;
 import com.flowledger.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -23,6 +24,26 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class User extends BaseEntity implements UserDetails {
+
+    @Column(nullable = false, length = 50)
+    private String firstName;
+    @Column(nullable = false, length = 50)
+    private String lastName;
+    @Column(nullable = false, unique = true, length = 100)
+    private String email;
+    @Column(nullable = false, length = 255)
+    private String password;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Currency currency;
+    @Column(nullable = false, length = 50)
+    private String timezone;
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean enabled = true;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -53,31 +74,4 @@ public class User extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
-
-    @Column(nullable = false, length = 50)
-    private String firstName;
-
-    @Column(nullable = false, length = 50)
-    private String lastName;
-
-    @Column(nullable = false, unique = true, length = 100)
-    private String email;
-
-    @Column(nullable = false, length = 255)
-    private String password;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole role;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Currency currency;
-
-    @Column(nullable = false, length = 50)
-    private String timezone;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private Boolean enabled = true;
 }

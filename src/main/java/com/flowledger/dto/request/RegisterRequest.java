@@ -2,6 +2,7 @@ package com.flowledger.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -16,14 +17,20 @@ public class RegisterRequest {
     @Size(max = 50)
     private String lastName;
 
-    @Email(message = "Invalid email format")
     @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
+    @Size(max = 100)
     private String email;
 
     @NotBlank(message = "Password is required")
     @Size(min = 8, max = 20)
+    @Pattern(
+            regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&]).{8,20}$",
+            message = "Password must contain at least one uppercase letter, one lowercase letter, one digit and one special character"
+    )
     private String password;
 
     @NotBlank(message = "Timezone is required")
+    @Size(max = 50)
     private String timezone;
 }
