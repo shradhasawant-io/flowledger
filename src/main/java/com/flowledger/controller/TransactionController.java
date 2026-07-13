@@ -1,6 +1,7 @@
 package com.flowledger.controller;
 
 import com.flowledger.dto.request.CreateTransactionRequest;
+import com.flowledger.dto.request.TransactionFilterRequest;
 import com.flowledger.dto.request.UpdateTransactionRequest;
 import com.flowledger.dto.response.ApiResponse;
 import com.flowledger.dto.response.TransactionResponse;
@@ -8,6 +9,11 @@ import com.flowledger.service.TransactionService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,18 +47,35 @@ public class TransactionController {
 
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<TransactionResponse>>> getMyTransactions() {
+    public ResponseEntity<ApiResponse<Page<TransactionResponse>>> getMyTransactions(
 
-        List<TransactionResponse> response =
-                transactionService.getMyTransactions();
+            @ParameterObject
+            @ModelAttribute
+            TransactionFilterRequest filter,
 
-        return ResponseEntity.ok(
-                ApiResponse.<List<TransactionResponse>>builder()
+            @ParameterObject
+            @PageableDefault(
+                    size = 10,
+                    sort = {"transactionDate", "id"},
+                    direction = Sort.Direction.DESC
+            )
+            Pageable pageable
+    ) {
+
+        Page<TransactionResponse> transactions =
+                transactionService.getMyTransactions(
+                        filter,
+                        pageable
+                );
+
+        ApiResponse<Page<TransactionResponse>> response =
+                ApiResponse.<Page<TransactionResponse>>builder()
                         .success(true)
-                        .message("Transactions fetched successfully")
-                        .data(response)
-                        .build()
-        );
+                        .message("Transactions retrieved successfully")
+                        .data(transactions)
+                        .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
@@ -100,5 +123,22 @@ public class TransactionController {
                         .message("Transaction deleted successfully")
                         .build()
         );
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<TransactionResponse>>> searchTransactions(
+            @RequestParam(name = "title") String title) {
+
+        List<TransactionResponse> transactions =
+                transactionService.searchTransactions(title);
+
+        ApiResponse<List<TransactionResponse>> response =
+                ApiResponse.<List<TransactionResponse>>builder()
+                        .success(true)
+                        .message("Transactions retrieved successfully")
+                        .data(transactions)
+                        .build();
+
+        return ResponseEntity.ok(response);
     }
 }

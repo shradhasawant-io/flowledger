@@ -1,6 +1,7 @@
 package com.flowledger.service.impl;
 
 import com.flowledger.dto.request.CreateTransactionRequest;
+import com.flowledger.dto.request.TransactionFilterRequest;
 import com.flowledger.dto.request.UpdateTransactionRequest;
 import com.flowledger.dto.response.TransactionResponse;
 import com.flowledger.entity.Transaction;
@@ -10,7 +11,11 @@ import com.flowledger.mapper.TransactionMapper;
 import com.flowledger.repository.TransactionRepository;
 import com.flowledger.service.AuthenticatedUserService;
 import com.flowledger.service.TransactionService;
+import com.flowledger.specification.TransactionSpecification;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -98,5 +103,45 @@ public class TransactionServiceImpl implements TransactionService {
                         new ResourceNotFoundException("Transaction not found"));
 
         transactionRepository.delete(transaction);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<TransactionResponse> searchTransactions(String title) {
+
+        User currentUser = authenticatedUserService.getCurrentUser();
+
+        List<Transaction> transactions =
+                transactionRepository.findByUserAndTitleContainingIgnoreCase(
+                        currentUser,
+                        title
+                );
+
+        return transactions.stream()
+                .map(transactionMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<TransactionResponse> getMyTransactions(
+            TransactionFilterRequest filter,
+            Pageable pageable
+    ) {
+        User currentUser = authenticatedUserService.getCurrentUser();
+
+        Specification<Transaction> specification =
+                Specification.<Transaction>unrestricted()
+                        .and(TransactionSpecification.belongsToUser(currentUser))
+                        .and(TransactionSpecification.hasType(filter.getType()))
+                        .and(TransactionSpecification.hasPaymentMethod(filter.getPaymentMethod()))
+                        .and(TransactionSpecification.hasStartDate(filter.getStartDate()))
+                        .and(TransactionSpecification.hasEndDate(filter.getEndDate()));
+
+        Page<Transaction> transactions =
+                transactionRepository.findAll(specification, pageable);
+
+        return transactions.map(transactionMapper::toResponse);
+
     }
 }
