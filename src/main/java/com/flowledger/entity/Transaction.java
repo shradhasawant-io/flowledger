@@ -5,7 +5,7 @@ import com.flowledger.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
+import com.flowledger.enums.TransactionCategory;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -24,6 +24,10 @@ public class Transaction extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionType type;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TransactionCategory category;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

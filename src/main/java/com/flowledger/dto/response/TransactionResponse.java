@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import com.flowledger.enums.TransactionCategory;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -23,6 +23,8 @@ public class TransactionResponse {
     private BigDecimal amount;
 
     private TransactionType type;
+
+    private TransactionCategory category;
 
     private PaymentMethod paymentMethod;
 

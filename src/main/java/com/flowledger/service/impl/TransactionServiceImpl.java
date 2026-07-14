@@ -18,7 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.flowledger.enums.TransactionCategory;
+import com.flowledger.enums.TransactionType;
 import java.util.List;
 
 @Service
@@ -34,6 +35,11 @@ public class TransactionServiceImpl implements TransactionService {
             CreateTransactionRequest request) {
 
         User currentUser = authenticatedUserService.getCurrentUser();
+
+        validateCategory(
+                request.getType(),
+                request.getCategory()
+        );
 
         Transaction transaction = transactionMapper.toEntity(request);
 
@@ -83,6 +89,11 @@ public class TransactionServiceImpl implements TransactionService {
                 .findByIdAndUser(id, currentUser)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Transaction not found"));
+
+        validateCategory(
+                request.getType(),
+                request.getCategory()
+        );
 
         transactionMapper.updateEntity(transaction, request);
 
@@ -143,5 +154,18 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactions.map(transactionMapper::toResponse);
 
+    }
+
+    private void validateCategory(
+            TransactionType type,
+            TransactionCategory category
+    ) {
+
+        if (category.getTransactionType() != type) {
+            throw new IllegalArgumentException(
+                    "Category " + category +
+                            " cannot be used with " + type + " transactions."
+            );
+        }
     }
 }

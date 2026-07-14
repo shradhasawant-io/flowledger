@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import com.flowledger.enums.TransactionCategory;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -28,6 +28,9 @@ public class UpdateTransactionRequest {
 
     @NotNull
     private TransactionType type;
+
+    @NotNull(message = "Category is required")
+    private TransactionCategory category;
 
     @NotNull
     private PaymentMethod paymentMethod;
