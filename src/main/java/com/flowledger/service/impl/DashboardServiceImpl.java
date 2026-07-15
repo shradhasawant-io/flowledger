@@ -2,6 +2,7 @@ package com.flowledger.service.impl;
 
 import com.flowledger.dto.projection.MonthlySummaryProjection;
 import com.flowledger.dto.response.DashboardSummaryResponse;
+import com.flowledger.dto.response.ExpenseCategorySummaryResponse;
 import com.flowledger.dto.response.MonthlySummaryResponse;
 import com.flowledger.entity.User;
 import com.flowledger.repository.TransactionRepository;
@@ -59,6 +60,22 @@ public class DashboardServiceImpl implements DashboardService {
                         .month(Month.of(summary.getMonth()))
                         .income(summary.getIncome())
                         .expense(summary.getExpense())
+                        .build())
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ExpenseCategorySummaryResponse> getExpenseByCategory() {
+
+        User currentUser = authenticatedUserService.getCurrentUser();
+
+        return transactionRepository
+                .getExpenseByCategory(currentUser)
+                .stream()
+                .map(summary -> ExpenseCategorySummaryResponse.builder()
+                        .category(summary.getCategory())
+                        .totalExpense(summary.getTotalExpense())
                         .build())
                 .toList();
     }

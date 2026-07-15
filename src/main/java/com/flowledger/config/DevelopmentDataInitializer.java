@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-
+import com.flowledger.enums.TransactionCategory;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,27 +27,46 @@ public class DevelopmentDataInitializer implements CommandLineRunner {
 
     private static final String DEV_USER_EMAIL = "dhruv@example.com";
 
-    private static final List<String> INCOME_TITLES = List.of(
-            "Salary",
-            "Freelance Payment",
-            "Bonus",
-            "Investment Return",
-            "Gift Received"
+    private static final List<SampleTransaction> INCOME_SAMPLES = List.of(
+
+            new SampleTransaction("Salary", TransactionCategory.SALARY),
+
+            new SampleTransaction("Freelance Payment", TransactionCategory.FREELANCE),
+
+            new SampleTransaction("Business Profit", TransactionCategory.BUSINESS),
+
+            new SampleTransaction("Investment Return", TransactionCategory.INVESTMENT),
+
+            new SampleTransaction("Gift Received", TransactionCategory.GIFT)
+
     );
 
-    private static final List<String> EXPENSE_TITLES = List.of(
-            "Groceries",
-            "Fuel",
-            "Coffee",
-            "Restaurant",
-            "Electricity Bill",
-            "Internet Bill",
-            "Movie Tickets",
-            "Uber",
-            "Mobile Recharge",
-            "Rent",
-            "Pharmacy",
-            "Shopping"
+    private static final List<SampleTransaction> EXPENSE_SAMPLES = List.of(
+
+            new SampleTransaction("Groceries", TransactionCategory.GROCERIES),
+
+            new SampleTransaction("Fuel", TransactionCategory.FUEL),
+
+            new SampleTransaction("Coffee", TransactionCategory.FOOD),
+
+            new SampleTransaction("Restaurant", TransactionCategory.FOOD),
+
+            new SampleTransaction("Electricity Bill", TransactionCategory.UTILITIES),
+
+            new SampleTransaction("Internet Bill", TransactionCategory.UTILITIES),
+
+            new SampleTransaction("Movie Tickets", TransactionCategory.ENTERTAINMENT),
+
+            new SampleTransaction("Uber", TransactionCategory.TRAVEL),
+
+            new SampleTransaction("Mobile Recharge", TransactionCategory.UTILITIES),
+
+            new SampleTransaction("Rent", TransactionCategory.RENT),
+
+            new SampleTransaction("Pharmacy", TransactionCategory.HEALTHCARE),
+
+            new SampleTransaction("Shopping", TransactionCategory.SHOPPING)
+
     );
 
     private final Random random = new Random();
@@ -91,19 +110,18 @@ public class DevelopmentDataInitializer implements CommandLineRunner {
         return false;
     }
 
-    private String getRandomIncomeTitle() {
+    private SampleTransaction getRandomIncomeSample() {
 
-        int index = random.nextInt(INCOME_TITLES.size());
+        int index = random.nextInt(INCOME_SAMPLES.size());
 
-        return INCOME_TITLES.get(index);
-
+        return INCOME_SAMPLES.get(index);
     }
 
-    private String getRandomExpenseTitle() {
+    private SampleTransaction getRandomExpenseSample() {
 
-        int index = random.nextInt(EXPENSE_TITLES.size());
+        int index = random.nextInt(EXPENSE_SAMPLES.size());
 
-        return EXPENSE_TITLES.get(index);
+        return EXPENSE_SAMPLES.get(index);
     }
 
     private BigDecimal getRandomIncomeAmount() {
@@ -132,9 +150,12 @@ public class DevelopmentDataInitializer implements CommandLineRunner {
 
     private Transaction createIncomeTransaction(User user) {
 
+        SampleTransaction sample = getRandomIncomeSample();
+
         Transaction transaction = new Transaction();
 
-        transaction.setTitle(getRandomIncomeTitle());
+        transaction.setTitle(sample.title());
+        transaction.setCategory(sample.category());
         transaction.setAmount(getRandomIncomeAmount());
         transaction.setTransactionDate(getRandomDate());
         transaction.setType(TransactionType.INCOME);
@@ -147,9 +168,13 @@ public class DevelopmentDataInitializer implements CommandLineRunner {
 
     private Transaction createExpenseTransaction(User user) {
 
+        SampleTransaction sample = getRandomExpenseSample();
+
         Transaction transaction = new Transaction();
 
-        transaction.setTitle(getRandomExpenseTitle());
+        transaction.setTitle(sample.title());
+        transaction.setCategory(sample.category());
+        transaction.setAmount(getRandomExpenseAmount());
         transaction.setAmount(getRandomExpenseAmount());
         transaction.setTransactionDate(getRandomDate());
         transaction.setType(TransactionType.EXPENSE);

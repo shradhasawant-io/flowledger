@@ -2,6 +2,7 @@ package com.flowledger.controller;
 
 import com.flowledger.dto.response.ApiResponse;
 import com.flowledger.dto.response.DashboardSummaryResponse;
+import com.flowledger.dto.response.ExpenseCategorySummaryResponse;
 import com.flowledger.dto.response.MonthlySummaryResponse;
 import com.flowledger.service.DashboardService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/v1/dashboard")
@@ -32,7 +35,7 @@ public class DashboardController {
                         .data(summary)
                         .build();
 
-        return ResponseEntity.ok(response);
+        return ok(response);
     }
 
     @GetMapping("/monthly-summary")
@@ -48,6 +51,21 @@ public class DashboardController {
                         .data(monthlySummary)
                         .build();
 
-        return ResponseEntity.ok(response);
+        return ok(response);
+    }
+
+    @GetMapping("/expense-by-category")
+    public ResponseEntity<ApiResponse<List<ExpenseCategorySummaryResponse>>> getExpenseByCategory() {
+
+        List<ExpenseCategorySummaryResponse> response =
+                dashboardService.getExpenseByCategory();
+
+        return ResponseEntity.ok(
+                ApiResponse.<List<ExpenseCategorySummaryResponse>>builder()
+                        .success(true)
+                        .message("Expense by category retrieved successfully")
+                        .data(response)
+                        .build()
+        );
     }
 }

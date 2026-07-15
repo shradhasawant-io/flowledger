@@ -1,5 +1,6 @@
 package com.flowledger.repository;
 
+import com.flowledger.dto.projection.ExpenseCategorySummaryProjection;
 import com.flowledger.dto.projection.MonthlySummaryProjection;
 import com.flowledger.entity.Transaction;
 import com.flowledger.entity.User;
@@ -61,6 +62,20 @@ ORDER BY
     MONTH(t.transactionDate)
 """)
     List<MonthlySummaryProjection> getMonthlySummary(
+            @Param("user") User user
+    );
+
+    @Query("""
+SELECT
+    t.category AS category,
+    SUM(t.amount) AS totalExpense
+FROM Transaction t
+WHERE t.user = :user
+  AND t.type = com.flowledger.enums.TransactionType.EXPENSE
+GROUP BY t.category
+ORDER BY SUM(t.amount) DESC
+""")
+    List<ExpenseCategorySummaryProjection> getExpenseByCategory(
             @Param("user") User user
     );
 
