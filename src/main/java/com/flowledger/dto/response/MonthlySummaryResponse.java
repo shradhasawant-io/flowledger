@@ -1,7 +1,7 @@
 package com.flowledger.dto.response;
 
 import lombok.*;
-
+import com.flowledger.enums.MonthlyStatus;
 import java.math.BigDecimal;
 import java.time.Month;
 
@@ -19,5 +19,11 @@ public class MonthlySummaryResponse {
     private BigDecimal income;
 
     private BigDecimal expense;
+
+    private BigDecimal saving;
+
+    private BigDecimal savingRate;
+
+    private MonthlyStatus status;
 
 }

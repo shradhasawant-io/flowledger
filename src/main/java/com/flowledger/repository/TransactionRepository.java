@@ -4,6 +4,7 @@ import com.flowledger.dto.projection.ExpenseCategorySummaryProjection;
 import com.flowledger.dto.projection.MonthlySummaryProjection;
 import com.flowledger.entity.Transaction;
 import com.flowledger.entity.User;
+import com.flowledger.enums.TransactionType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -40,8 +41,8 @@ AND t.type = com.flowledger.enums.TransactionType.EXPENSE
 
     @Query("""
 SELECT
-    YEAR(t.transactionDate) AS year,
-    MONTH(t.transactionDate) AS month,
+    YEAR(t.transactionTimestamp) AS year,
+    MONTH(t.transactionTimestamp) AS month,
     SUM(CASE
             WHEN t.type = com.flowledger.enums.TransactionType.INCOME
             THEN t.amount
@@ -55,11 +56,11 @@ SELECT
 FROM Transaction t
 WHERE t.user = :user
 GROUP BY
-    YEAR(t.transactionDate),
-    MONTH(t.transactionDate)
+    YEAR(t.transactionTimestamp),
+    MONTH(t.transactionTimestamp)
 ORDER BY
-    YEAR(t.transactionDate),
-    MONTH(t.transactionDate)
+    YEAR(t.transactionTimestamp),
+    MONTH(t.transactionTimestamp)
 """)
     List<MonthlySummaryProjection> getMonthlySummary(
             @Param("user") User user
@@ -79,9 +80,11 @@ ORDER BY SUM(t.amount) DESC
             @Param("user") User user
     );
 
+    List<Transaction> findTop5ByUserOrderByTransactionTimestampDesc(User user);
+
     List<Transaction> findByUser(User user);
 
-    List<Transaction> findByUserOrderByTransactionDateDesc(User user);
+    List<Transaction> findByUserOrderByTransactionTimestampDesc(User user);
 
     Optional<Transaction> findByIdAndUser(Long id, User user);
 
@@ -95,6 +98,11 @@ ORDER BY SUM(t.amount) DESC
     Page<Transaction> findByUser(
             User user,
             Pageable pageable
+    );
+
+    Optional<Transaction> findTopByUserAndTypeOrderByAmountDesc(
+            User user,
+            TransactionType type
     );
 
     //void deleteByIdAndUser(Long id, User user);

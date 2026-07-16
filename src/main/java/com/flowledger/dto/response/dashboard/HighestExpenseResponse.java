@@ -1,21 +1,16 @@
-package com.flowledger.dto.response;
+package com.flowledger.dto.response.dashboard;
 
 import com.flowledger.enums.PaymentMethod;
-import com.flowledger.enums.TransactionType;
-import lombok.AllArgsConstructor;
+import com.flowledger.enums.TransactionCategory;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import com.flowledger.enums.TransactionCategory;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.LocalDate;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class TransactionResponse {
+public class HighestExpenseResponse {
 
     private Long id;
 
@@ -23,13 +18,10 @@ public class TransactionResponse {
 
     private BigDecimal amount;
 
-    private TransactionType type;
-
     private TransactionCategory category;
 
     private PaymentMethod paymentMethod;
 
     private LocalDateTime transactionTimestamp;
 
-    private String notes;
 }

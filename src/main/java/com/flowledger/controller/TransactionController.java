@@ -56,7 +56,7 @@ public class TransactionController {
             @ParameterObject
             @PageableDefault(
                     size = 10,
-                    sort = {"transactionDate", "id"},
+                    sort = {"transactionTimestamp", "id"},
                     direction = Sort.Direction.DESC
             )
             Pageable pageable

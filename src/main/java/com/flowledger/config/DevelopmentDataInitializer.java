@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.time.LocalDateTime;
 
 @Component
 @Profile("dev")
@@ -140,12 +141,12 @@ public class DevelopmentDataInitializer implements CommandLineRunner {
 
     }
 
-    private LocalDate getRandomDate() {
+    private LocalDateTime getRandomTimestamp() {
 
-        int daysAgo = random.nextInt(90);
-
-        return LocalDate.now().minusDays(daysAgo);
-
+        return LocalDateTime.now()
+                .minusDays(random.nextInt(120))
+                .minusHours(random.nextInt(24))
+                .minusMinutes(random.nextInt(60));
     }
 
     private Transaction createIncomeTransaction(User user) {
@@ -157,7 +158,7 @@ public class DevelopmentDataInitializer implements CommandLineRunner {
         transaction.setTitle(sample.title());
         transaction.setCategory(sample.category());
         transaction.setAmount(getRandomIncomeAmount());
-        transaction.setTransactionDate(getRandomDate());
+        transaction.setTransactionTimestamp(getRandomTimestamp());
         transaction.setType(TransactionType.INCOME);
         transaction.setPaymentMethod(PaymentMethod.UPI);
         transaction.setUser(user);
@@ -176,7 +177,7 @@ public class DevelopmentDataInitializer implements CommandLineRunner {
         transaction.setCategory(sample.category());
         transaction.setAmount(getRandomExpenseAmount());
         transaction.setAmount(getRandomExpenseAmount());
-        transaction.setTransactionDate(getRandomDate());
+        transaction.setTransactionTimestamp(getRandomTimestamp());
         transaction.setType(TransactionType.EXPENSE);
         transaction.setPaymentMethod(PaymentMethod.UPI);
         transaction.setUser(user);

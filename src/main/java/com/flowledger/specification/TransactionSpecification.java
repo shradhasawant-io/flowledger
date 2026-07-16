@@ -43,7 +43,7 @@ public class TransactionSpecification {
         }
 
         return (root, query, builder) ->
-                builder.greaterThanOrEqualTo(root.get("transactionDate"), startDate);
+                builder.greaterThanOrEqualTo(root.get("transactionTimestamp"), startDate);
     }
 
     public static Specification<Transaction> hasEndDate(
@@ -55,7 +55,7 @@ public class TransactionSpecification {
         }
 
         return (root, query, builder) ->
-                builder.lessThanOrEqualTo(root.get("transactionDate"), endDate);
+                builder.lessThanOrEqualTo(root.get("transactionTimestamp"), endDate);
     }
 
     public static Specification<Transaction> belongsToUser(

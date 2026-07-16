@@ -57,7 +57,7 @@ public class TransactionServiceImpl implements TransactionService {
         User currentUser = authenticatedUserService.getCurrentUser();
 
         return transactionRepository
-                .findByUserOrderByTransactionDateDesc(currentUser)
+                .findByUserOrderByTransactionTimestampDesc(currentUser)
                 .stream()
                 .map(transactionMapper::toResponse)
                 .toList();

@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.flowledger.enums.TransactionCategory;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.LocalDate;
 
 @Data
@@ -39,7 +40,7 @@ public class CreateTransactionRequest {
     private PaymentMethod paymentMethod;
 
     @NotNull
-    private LocalDate transactionDate;
+    private LocalDateTime transactionTimestamp;
 
     @Size(max = 500)
     private String notes;

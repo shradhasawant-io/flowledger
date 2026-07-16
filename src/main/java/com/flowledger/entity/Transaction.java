@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 import com.flowledger.enums.TransactionCategory;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.LocalDate;
+
 
 @Entity
 @Table(name = "transactions")
@@ -34,7 +36,7 @@ public class Transaction extends BaseEntity {
     private PaymentMethod paymentMethod;
 
     @Column(nullable = false)
-    private LocalDate transactionDate;
+    private LocalDateTime transactionTimestamp;
 
     @Column(length = 500)
     private String notes;

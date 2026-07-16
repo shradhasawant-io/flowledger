@@ -18,7 +18,7 @@ public class TransactionMapper {
         transaction.setType(request.getType());
         transaction.setCategory(request.getCategory());
         transaction.setPaymentMethod(request.getPaymentMethod());
-        transaction.setTransactionDate(request.getTransactionDate());
+        transaction.setTransactionTimestamp(request.getTransactionTimestamp());
         transaction.setNotes(request.getNotes());
 
         return transaction;
@@ -33,7 +33,7 @@ public class TransactionMapper {
                 .type(transaction.getType())
                 .category(transaction.getCategory())
                 .paymentMethod(transaction.getPaymentMethod())
-                .transactionDate(transaction.getTransactionDate())
+                .transactionTimestamp(transaction.getTransactionTimestamp())
                 .notes(transaction.getNotes())
                 .build();
     }
@@ -47,7 +47,7 @@ public class TransactionMapper {
         transaction.setType(request.getType());
         transaction.setCategory(request.getCategory());
         transaction.setPaymentMethod(request.getPaymentMethod());
-        transaction.setTransactionDate(request.getTransactionDate());
+        transaction.setTransactionTimestamp(request.getTransactionTimestamp());
         transaction.setNotes(request.getNotes());
     }
 }
