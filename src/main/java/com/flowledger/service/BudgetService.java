@@ -2,6 +2,7 @@ package com.flowledger.service;
 
 import com.flowledger.dto.request.CreateBudgetRequest;
 import com.flowledger.dto.request.UpdateBudgetRequest;
+import com.flowledger.dto.response.BudgetProgressResponse;
 import com.flowledger.dto.response.BudgetResponse;
 
 import java.util.List;
@@ -18,5 +19,7 @@ public interface BudgetService {
                                 UpdateBudgetRequest request);
 
     void deleteBudget(Long budgetId);
+
+    BudgetProgressResponse getBudgetProgress(Long budgetId);
 
 }

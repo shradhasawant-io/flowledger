@@ -3,6 +3,7 @@ package com.flowledger.controller;
 import com.flowledger.dto.request.CreateBudgetRequest;
 import com.flowledger.dto.request.UpdateBudgetRequest;
 import com.flowledger.dto.response.ApiResponse;
+import com.flowledger.dto.response.BudgetProgressResponse;
 import com.flowledger.dto.response.BudgetResponse;
 import com.flowledger.service.BudgetService;
 import jakarta.validation.Valid;
@@ -93,6 +94,22 @@ public class BudgetController {
                 ApiResponse.<Void>builder()
                         .success(true)
                         .message("Budget deleted successfully")
+                        .build()
+        );
+    }
+
+    @GetMapping("/{id}/progress")
+    public ResponseEntity<ApiResponse<BudgetProgressResponse>> getBudgetProgress(
+            @PathVariable Long id) {
+
+        BudgetProgressResponse response =
+                budgetService.getBudgetProgress(id);
+
+        return ResponseEntity.ok(
+                ApiResponse.<BudgetProgressResponse>builder()
+                        .success(true)
+                        .message("Budget progress retrieved successfully")
+                        .data(response)
                         .build()
         );
     }

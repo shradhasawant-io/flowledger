@@ -4,6 +4,7 @@ import com.flowledger.dto.projection.ExpenseCategorySummaryProjection;
 import com.flowledger.dto.projection.MonthlySummaryProjection;
 import com.flowledger.entity.Transaction;
 import com.flowledger.entity.User;
+import com.flowledger.enums.TransactionCategory;
 import com.flowledger.enums.TransactionType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,6 +80,22 @@ ORDER BY SUM(t.amount) DESC
 """)
     List<ExpenseCategorySummaryProjection> getExpenseByCategory(
             @Param("user") User user
+    );
+
+    @Query("""
+    SELECT COALESCE(SUM(t.amount), 0)
+    FROM Transaction t
+    WHERE t.user = :user
+      AND t.type = :type
+      AND t.category = :category
+      AND t.transactionTimestamp BETWEEN :startDate AND :endDate
+    """)
+    BigDecimal getTotalAmountByCategoryAndDateRange(
+            @Param("user") User user,
+            @Param("type") TransactionType type,
+            @Param("category") TransactionCategory category,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate
     );
 
     List<Transaction> findTop5ByUserOrderByTransactionTimestampDesc(User user);
