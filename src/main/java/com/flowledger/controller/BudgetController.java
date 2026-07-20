@@ -5,7 +5,9 @@ import com.flowledger.dto.request.UpdateBudgetRequest;
 import com.flowledger.dto.response.ApiResponse;
 import com.flowledger.dto.response.BudgetProgressResponse;
 import com.flowledger.dto.response.BudgetResponse;
+import com.flowledger.dto.response.BudgetSuggestionResponse;
 import com.flowledger.service.BudgetService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -109,6 +111,27 @@ public class BudgetController {
                 ApiResponse.<BudgetProgressResponse>builder()
                         .success(true)
                         .message("Budget progress retrieved successfully")
+                        .data(response)
+                        .build()
+        );
+    }
+
+    @GetMapping("/{budgetId}/suggestions")
+    @Operation(
+            summary = "Get smart budget suggestions",
+            description = "Returns personalized smart suggestions for a specific budget."
+    )
+    public ResponseEntity<ApiResponse<BudgetSuggestionResponse>> getBudgetSuggestions(
+            @PathVariable Long budgetId) {
+
+        BudgetSuggestionResponse response =
+                budgetService.getBudgetSuggestions(budgetId);
+
+
+        return ResponseEntity.ok(
+                ApiResponse.<BudgetSuggestionResponse>builder()
+                        .success(true)
+                        .message("Budget suggestions retrieved successfully.")
                         .data(response)
                         .build()
         );

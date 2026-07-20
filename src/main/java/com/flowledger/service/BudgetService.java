@@ -4,6 +4,7 @@ import com.flowledger.dto.request.CreateBudgetRequest;
 import com.flowledger.dto.request.UpdateBudgetRequest;
 import com.flowledger.dto.response.BudgetProgressResponse;
 import com.flowledger.dto.response.BudgetResponse;
+import com.flowledger.dto.response.BudgetSuggestionResponse;
 
 import java.util.List;
 
@@ -21,5 +22,7 @@ public interface BudgetService {
     void deleteBudget(Long budgetId);
 
     BudgetProgressResponse getBudgetProgress(Long budgetId);
+
+    BudgetSuggestionResponse getBudgetSuggestions(Long budgetId);
 
 }

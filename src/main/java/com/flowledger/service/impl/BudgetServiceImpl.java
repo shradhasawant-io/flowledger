@@ -4,11 +4,11 @@ import com.flowledger.dto.request.CreateBudgetRequest;
 import com.flowledger.dto.request.UpdateBudgetRequest;
 import com.flowledger.dto.response.BudgetProgressResponse;
 import com.flowledger.dto.response.BudgetResponse;
+import com.flowledger.dto.response.BudgetSuggestion;
+import com.flowledger.dto.response.BudgetSuggestionResponse;
 import com.flowledger.entity.Budget;
 import com.flowledger.entity.User;
-import com.flowledger.enums.BudgetAlertType;
-import com.flowledger.enums.BudgetStatus;
-import com.flowledger.enums.TransactionType;
+import com.flowledger.enums.*;
 import com.flowledger.mapper.BudgetMapper;
 import com.flowledger.repository.BudgetRepository;
 import com.flowledger.repository.TransactionRepository;
@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -159,6 +160,16 @@ public class BudgetServiceImpl implements BudgetService {
                 new IllegalArgumentException("Budget not found.")
         );
 
+        return calculateBudgetProgress(currentUser, budget);
+
+
+    }
+
+    private BudgetProgressResponse calculateBudgetProgress(
+            User currentUser,
+            Budget budget
+    ) {
+
         BigDecimal spentAmount = transactionRepository.getTotalAmountByCategoryAndDateRange(
                 currentUser,
                 TransactionType.EXPENSE,
@@ -225,12 +236,102 @@ public class BudgetServiceImpl implements BudgetService {
                 .remainingAmount(remainingAmount)
                 .percentageUsed(percentageUsed)
                 .status(status)
-
                 .showAlert(showAlert)
                 .alertType(alertType)
                 .alertMessage(alertMessage)
 
                 .build();
+
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BudgetSuggestionResponse getBudgetSuggestions(Long budgetId) {
+
+        User currentUser = authenticatedUserService.getCurrentUser();
+
+        Budget budget = budgetRepository.findByIdAndUser(budgetId, currentUser)
+                .orElseThrow(() -> new IllegalArgumentException("Budget not found."));
+
+        BudgetProgressResponse progress =
+                calculateBudgetProgress(currentUser, budget);
+
+        List<BudgetSuggestion> suggestions =
+                generateSuggestions(progress);
+
+
+        return BudgetSuggestionResponse.builder()
+                .budgetId(budget.getId())
+                .category(budget.getCategory())
+                .budgetAmount(budget.getBudgetAmount())
+                .spentAmount(progress.getSpentAmount())
+                .remainingAmount(progress.getRemainingAmount())
+                .usagePercentage(progress.getPercentageUsed())
+                .suggestions(suggestions)
+                .build();
+    }
+
+    private List<BudgetSuggestion> generateSuggestions(
+            BudgetProgressResponse progress) {
+
+        List<BudgetSuggestion> suggestions = new ArrayList<>();
+
+        BigDecimal usagePercentage = progress.getPercentageUsed();
+
+        if (usagePercentage.compareTo(BigDecimal.valueOf(100)) >= 0) {
+
+            suggestions.add(
+                    BudgetSuggestion.builder()
+                            .type(SuggestionType.REDUCE_SPENDING)
+                            .priority(SuggestionPriority.CRITICAL)
+                            .title("Budget Exceeded")
+                            .description("You have exceeded your budget for this category.")
+                            .action("Reduce spending immediately or consider increasing next month's budget.")
+                            .build()
+            );
+        }
+
+        if (usagePercentage.compareTo(BigDecimal.valueOf(90)) >= 0
+                && usagePercentage.compareTo(BigDecimal.valueOf(100)) < 0) {
+
+            suggestions.add(
+                    BudgetSuggestion.builder()
+                            .type(SuggestionType.REDUCE_SPENDING)
+                            .priority(SuggestionPriority.HIGH)
+                            .title("Budget Almost Exhausted")
+                            .description("You have already used more than 90% of your budget.")
+                            .action("Avoid unnecessary spending for the remaining budget period.")
+                            .build()
+            );
+        }
+
+        if (usagePercentage.compareTo(BigDecimal.valueOf(50)) < 0) {
+
+            suggestions.add(
+                    BudgetSuggestion.builder()
+                            .type(SuggestionType.SAVE_SURPLUS)
+                            .priority(SuggestionPriority.LOW)
+                            .title("Budget Under Control")
+                            .description("You are spending well within your planned budget.")
+                            .action("Consider transferring part of your remaining budget to savings.")
+                            .build()
+            );
+        }
+
+        if (suggestions.isEmpty()) {
+
+            suggestions.add(
+                    BudgetSuggestion.builder()
+                            .type(SuggestionType.MAINTAIN_BUDGET)
+                            .priority(SuggestionPriority.MEDIUM)
+                            .title("Keep It Up")
+                            .description("Your spending is currently balanced.")
+                            .action("Continue following your current spending pattern.")
+                            .build()
+            );
+        }
+
+        return suggestions;
     }
 }
 
