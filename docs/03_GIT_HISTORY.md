@@ -352,6 +352,21 @@ GET /api/v1/budgets/{id}/progress
 None
 
 ---
+## Sprint 5.3 – Smart Budget Suggestions
+
+Date: 20 July 2026
+
+Completed:
+- Added Smart Budget Suggestions endpoint
+- Added SuggestionType enum
+- Added SuggestionPriority enum
+- Implemented BudgetSuggestion DTO
+- Implemented BudgetSuggestionResponse DTO
+- Added BudgetService#getBudgetSuggestions()
+- Added rule-based suggestion engine
+- Refactored budget progress calculation into reusable helper
+- Eliminated duplicate repository lookup
+- Swagger and business testing completed
 
 # Upcoming Release
 
@@ -363,7 +378,6 @@ Planned Features
 
 - Budget Health Score
 - Budget Forecast
-- Smart Budget Suggestions
 - Spending Insights
 
 Status

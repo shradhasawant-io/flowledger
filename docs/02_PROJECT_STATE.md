@@ -348,19 +348,6 @@ Documentation
 
 ---
 
-# Next Sprint
-
-Sprint 5.3
-
-Feature
-
-Budget Health Score
-
-Expected Version
-
-v1.4.0
-
----
 
 # Known Rules
 
@@ -391,6 +378,21 @@ Never
 ❌ Field Injection
 
 ---
+## Sprint 5.3 - Smart Budget Suggestions
+
+Status: ✅ Completed
+
+Features:
+- Rule-based budget recommendation engine
+- Smart suggestion API
+- BudgetSuggestion DTO
+- BudgetSuggestionResponse DTO
+- SuggestionType enum
+- SuggestionPriority enum
+- Reused Budget Progress calculations
+- Optimized service by extracting calculateBudgetProgress()
+- Swagger tested
+- Business scenarios verified
 
 # Documentation Status
 

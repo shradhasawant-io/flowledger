@@ -2,10 +2,7 @@ package com.flowledger.service.impl;
 
 import com.flowledger.dto.request.CreateBudgetRequest;
 import com.flowledger.dto.request.UpdateBudgetRequest;
-import com.flowledger.dto.response.BudgetProgressResponse;
-import com.flowledger.dto.response.BudgetResponse;
-import com.flowledger.dto.response.BudgetSuggestion;
-import com.flowledger.dto.response.BudgetSuggestionResponse;
+import com.flowledger.dto.response.*;
 import com.flowledger.entity.Budget;
 import com.flowledger.entity.User;
 import com.flowledger.enums.*;
@@ -20,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -332,6 +331,82 @@ public class BudgetServiceImpl implements BudgetService {
         }
 
         return suggestions;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BudgetForecastResponse getBudgetForecast(Long budgetId) {
+
+        User currentUser = authenticatedUserService.getCurrentUser();
+
+        Budget budget = budgetRepository.findByIdAndUser(
+                budgetId,
+                currentUser
+        ).orElseThrow(() ->
+                new IllegalArgumentException("Budget not found.")
+        );
+
+        BudgetProgressResponse progress =
+                calculateBudgetProgress(currentUser, budget);
+
+
+
+        LocalDate today = LocalDate.now();
+
+        int totalBudgetDays =
+                (int) ChronoUnit.DAYS.between(
+                        budget.getStartDate(),
+                        budget.getEndDate()
+                ) + 1;
+
+        int elapsedDays =
+                (int) ChronoUnit.DAYS.between(
+                        budget.getStartDate(),
+                        today
+                ) + 1;
+
+        elapsedDays = Math.max(elapsedDays, 1);
+
+        int remainingDays =
+                totalBudgetDays - elapsedDays;
+
+        BigDecimal averageDailySpending =
+                progress.getSpentAmount()
+                        .divide(
+                                BigDecimal.valueOf(elapsedDays),
+                                2,
+                                RoundingMode.HALF_UP
+                        );
+
+        BigDecimal forecastedSpending =
+                averageDailySpending.multiply(
+                        BigDecimal.valueOf(totalBudgetDays)
+                );
+
+        BigDecimal expectedRemainingAmount =
+                budget.getBudgetAmount()
+                        .subtract(forecastedSpending);
+
+        boolean budgetLikelyToExceed =
+                forecastedSpending.compareTo(
+                        budget.getBudgetAmount()
+                ) > 0;
+
+        return BudgetForecastResponse.builder()
+                .budgetId(budget.getId())
+                .category(budget.getCategory())
+                .period(budget.getPeriod())
+                .budgetAmount(budget.getBudgetAmount())
+                .spentAmount(progress.getSpentAmount())
+                .totalBudgetDays(totalBudgetDays)
+                .elapsedDays(elapsedDays)
+                .remainingDays(remainingDays)
+                .averageDailySpending(averageDailySpending)
+                .forecastedSpending(forecastedSpending)
+                .expectedRemainingAmount(expectedRemainingAmount)
+                .budgetLikelyToExceed(budgetLikelyToExceed)
+                .build();
+
     }
 }
 

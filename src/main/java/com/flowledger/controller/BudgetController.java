@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-
+import com.flowledger.dto.response.BudgetForecastResponse;
 import java.util.List;
 
 @RestController
@@ -132,6 +132,26 @@ public class BudgetController {
                 ApiResponse.<BudgetSuggestionResponse>builder()
                         .success(true)
                         .message("Budget suggestions retrieved successfully.")
+                        .data(response)
+                        .build()
+        );
+    }
+
+    @GetMapping("/{budgetId}/forecast")
+    @Operation(
+            summary = "Get budget forecast",
+            description = "Predicts the expected budget utilization by the end of the budget period based on the current spending rate."
+    )
+    public ResponseEntity<ApiResponse<BudgetForecastResponse>> getBudgetForecast(
+            @PathVariable Long budgetId) {
+
+        BudgetForecastResponse response =
+                budgetService.getBudgetForecast(budgetId);
+
+        return ResponseEntity.ok(
+                ApiResponse.<BudgetForecastResponse>builder()
+                        .success(true)
+                        .message("Budget forecast retrieved successfully.")
                         .data(response)
                         .build()
         );
