@@ -380,6 +380,133 @@ Completed:
 - Boundary testing completed
 - Edge cases verified
 
+## Sprint 5.5 – Budget Health Score
+
+Completed:
+- Added BudgetHealthStatus enum
+- Added BudgetHealthResponse
+- Added getBudgetHealth()
+- Implemented penalty-based scoring engine
+- Added health endpoint
+- Swagger testing completed
+- Edge cases verified
+
+📦 FlowLedger v1.3.0 Release
+Release Name
+FlowLedger v1.3.0
+Budget Analytics Module
+Version Summary
+Version : v1.3.0
+
+Status : Stable Release
+
+Module : Budget Analytics
+
+Release Type : MINOR
+Features Included
+Budget Management
+✅ Budget CRUD
+
+Create Budget
+
+Update Budget
+
+Delete Budget
+
+View Budgets
+Budget Analytics
+✅ Budget Progress
+
+Budget Usage %
+
+Remaining Amount
+
+Budget Status
+Budget Alerts
+✅ Budget Alerts
+
+NONE
+
+WARNING
+
+EXCEEDED
+Smart Budget Suggestions
+✅ Smart Suggestions
+
+Reduce Spending
+
+Maintain Budget
+
+Save Surplus
+
+Priority Based Suggestions
+Budget Forecast
+✅ Budget Forecast
+
+Average Daily Spending
+
+Forecast Spending
+
+Expected Remaining Amount
+
+Likely To Exceed
+Budget Health Score
+✅ Budget Health Score
+
+0–100 Score
+
+Health Status
+
+Summary
+
+Integrated Analytics
+REST APIs Included
+POST   /api/v1/budgets
+
+GET    /api/v1/budgets
+
+GET    /api/v1/budgets/{id}
+
+PUT    /api/v1/budgets/{id}
+
+DELETE /api/v1/budgets/{id}
+
+GET    /api/v1/budgets/{id}/progress
+
+GET    /api/v1/budgets/{id}/suggestions
+
+GET    /api/v1/budgets/{id}/forecast
+
+GET    /api/v1/budgets/{id}/health
+Testing Status
+CRUD Tests                    ✅
+
+Progress Tests                ✅
+
+Alert Tests                   ✅
+
+Suggestion Tests              ✅
+
+Forecast Tests                ✅
+
+Health Score Tests            ✅
+
+Boundary Tests                ✅
+
+Edge Case Tests               ✅
+
+Swagger Verification          ✅
+Known Technical Debt
+
+We should explicitly record this instead of forgetting it.
+
+Technical Debt (Deferred)
+
+• Duplicate service composition in BudgetHealthService
+• Repository lookups can be optimized
+• Shared analytics helper extraction
+
+Status: Deferred to "Budget Module Refactoring Sprint".
 # Upcoming Release
 
 Version

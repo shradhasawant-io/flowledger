@@ -409,6 +409,20 @@ Features:
 - Boundary tested
 - Edge cases verified
 
+## Sprint 5.5 – Budget Health Score
+
+Status: ✅ Completed
+
+Features:
+- Budget health analytics
+- 0–100 health scoring engine
+- Health status classification
+- Summary generation
+- Reused Progress, Forecast and Suggestions
+- Health endpoint
+- Swagger tested
+- Boundary tested
+- Edge cases verified
 # Documentation Status
 
 | Document | Status |
