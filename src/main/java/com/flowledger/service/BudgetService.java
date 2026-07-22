@@ -6,7 +6,7 @@ import com.flowledger.dto.response.BudgetProgressResponse;
 import com.flowledger.dto.response.BudgetResponse;
 import com.flowledger.dto.response.BudgetSuggestionResponse;
 import com.flowledger.dto.response.BudgetForecastResponse;
-
+import com.flowledger.dto.response.BudgetHealthResponse;
 import java.util.List;
 
 public interface BudgetService {
@@ -27,5 +27,7 @@ public interface BudgetService {
     BudgetSuggestionResponse getBudgetSuggestions(Long budgetId);
 
     BudgetForecastResponse getBudgetForecast(Long budgetId);
+
+    BudgetHealthResponse getBudgetHealth(Long budgetId);
 
 }

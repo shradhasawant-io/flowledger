@@ -23,6 +23,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowledger.enums.BudgetAlertType;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -407,6 +409,114 @@ public class BudgetServiceImpl implements BudgetService {
                 .budgetLikelyToExceed(budgetLikelyToExceed)
                 .build();
 
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BudgetHealthResponse getBudgetHealth(Long budgetId) {
+
+        User currentUser = authenticatedUserService.getCurrentUser();
+
+        Budget budget = budgetRepository.findByIdAndUser(
+                budgetId,
+                currentUser
+        ).orElseThrow(() ->
+                new IllegalArgumentException("Budget not found.")
+        );
+
+        BudgetProgressResponse progress =
+                calculateBudgetProgress(currentUser, budget);
+
+        BudgetSuggestionResponse suggestions =
+                getBudgetSuggestions(budgetId);
+
+        BudgetForecastResponse forecast =
+                getBudgetForecast(budgetId);
+
+        int healthScore = 100;
+
+        BigDecimal percentageUsed = progress.getPercentageUsed();
+
+        if (percentageUsed.compareTo(BigDecimal.valueOf(100)) > 0) {
+            healthScore -= 40;
+        } else if (percentageUsed.compareTo(BigDecimal.valueOf(90)) >= 0) {
+            healthScore -= 30;
+        } else if (percentageUsed.compareTo(BigDecimal.valueOf(75)) > 0) {
+            healthScore -= 20;
+        } else if (percentageUsed.compareTo(BigDecimal.valueOf(50)) > 0) {
+            healthScore -= 10;
+        }
+
+        if (forecast.getBudgetLikelyToExceed()) {
+            healthScore -= 30;
+        }
+
+        switch (progress.getAlertType()) {
+
+            case NONE -> {
+            }
+
+            case WARNING -> healthScore -= 10;
+
+            case EXCEEDED -> healthScore -= 20;
+        }
+
+        SuggestionPriority highestPriority =
+                suggestions.getSuggestions()
+                        .stream()
+                        .map(BudgetSuggestion::getPriority)
+                        .max(Enum::compareTo)
+                        .orElse(SuggestionPriority.LOW);
+
+        switch (highestPriority) {
+
+            case MEDIUM -> healthScore -= 5;
+
+            case HIGH -> healthScore -= 8;
+
+            case CRITICAL -> healthScore -= 10;
+
+            default -> {
+            }
+        }
+
+        healthScore = Math.max(0, Math.min(100, healthScore));
+
+        BudgetHealthStatus healthStatus;
+
+        if (healthScore >= 90) {
+            healthStatus = BudgetHealthStatus.EXCELLENT;
+        } else if (healthScore >= 75) {
+            healthStatus = BudgetHealthStatus.GOOD;
+        } else if (healthScore >= 60) {
+            healthStatus = BudgetHealthStatus.FAIR;
+        } else if (healthScore >= 40) {
+            healthStatus = BudgetHealthStatus.WARNING;
+        } else {
+            healthStatus = BudgetHealthStatus.CRITICAL;
+        }
+
+        String summary = switch (healthStatus) {
+            case EXCELLENT -> "Your budget is in excellent condition.";
+            case GOOD -> "Your budget is healthy.";
+            case FAIR -> "Your budget is stable but needs attention.";
+            case WARNING -> "Your budget requires immediate attention.";
+            case CRITICAL -> "Your budget is in a critical state.";
+        };
+
+        return BudgetHealthResponse.builder()
+                .budgetId(budget.getId())
+                .category(budget.getCategory())
+                .period(budget.getPeriod())
+                .budgetAmount(budget.getBudgetAmount())
+                .spentAmount(progress.getSpentAmount())
+                .percentageUsed(progress.getPercentageUsed())
+                .healthScore(healthScore)
+                .healthStatus(healthStatus)
+                .budgetLikelyToExceed(forecast.getBudgetLikelyToExceed())
+                .totalSuggestions(suggestions.getSuggestions().size())
+                .summary(summary)
+                .build();
     }
 }
 

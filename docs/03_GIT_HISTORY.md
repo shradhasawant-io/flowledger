@@ -368,6 +368,18 @@ Completed:
 - Eliminated duplicate repository lookup
 - Swagger and business testing completed
 
+## Sprint 5.4 – Budget Forecast
+
+Completed:
+- Added BudgetForecastResponse
+- Added BudgetService#getBudgetForecast()
+- Implemented budget forecasting engine
+- Reused calculateBudgetProgress()
+- Added forecast endpoint
+- Swagger testing completed
+- Boundary testing completed
+- Edge cases verified
+
 # Upcoming Release
 
 Version

@@ -394,6 +394,21 @@ Features:
 - Swagger tested
 - Business scenarios verified
 
+## Sprint 5.4 – Budget Forecast
+
+Status: ✅ Completed
+
+Features:
+- Budget forecasting API
+- Forecast calculation engine
+- Daily spending projection
+- Forecast response DTO
+- Reused calculateBudgetProgress()
+- Budget forecast endpoint
+- Swagger tested
+- Boundary tested
+- Edge cases verified
+
 # Documentation Status
 
 | Document | Status |

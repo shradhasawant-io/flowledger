@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import com.flowledger.dto.response.BudgetForecastResponse;
+import com.flowledger.dto.response.BudgetHealthResponse;
 import java.util.List;
 
 @RestController
@@ -152,6 +153,26 @@ public class BudgetController {
                 ApiResponse.<BudgetForecastResponse>builder()
                         .success(true)
                         .message("Budget forecast retrieved successfully.")
+                        .data(response)
+                        .build()
+        );
+    }
+
+    @GetMapping("/{budgetId}/health")
+    @Operation(
+            summary = "Get budget health score",
+            description = "Calculates the overall budget health score by combining budget progress, alerts, smart suggestions, and forecast."
+    )
+    public ResponseEntity<ApiResponse<BudgetHealthResponse>> getBudgetHealth(
+            @PathVariable Long budgetId) {
+
+        BudgetHealthResponse response =
+                budgetService.getBudgetHealth(budgetId);
+
+        return ResponseEntity.ok(
+                ApiResponse.<BudgetHealthResponse>builder()
+                        .success(true)
+                        .message("Budget health retrieved successfully.")
                         .data(response)
                         .build()
         );
