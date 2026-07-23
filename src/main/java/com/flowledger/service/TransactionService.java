@@ -6,7 +6,7 @@ import com.flowledger.dto.request.UpdateTransactionRequest;
 import com.flowledger.dto.response.TransactionResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
+import com.flowledger.dto.response.SpendingInsightsResponse;
 import java.util.List;
 
 public interface TransactionService {
@@ -32,4 +32,6 @@ public interface TransactionService {
             Long id,
             UpdateTransactionRequest request
     );
+
+    SpendingInsightsResponse getSpendingInsights();
 }

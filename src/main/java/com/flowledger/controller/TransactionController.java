@@ -6,6 +6,7 @@ import com.flowledger.dto.request.UpdateTransactionRequest;
 import com.flowledger.dto.response.ApiResponse;
 import com.flowledger.dto.response.TransactionResponse;
 import com.flowledger.service.TransactionService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.flowledger.dto.response.SpendingInsightsResponse;
 import java.util.List;
 
 @RestController
@@ -140,5 +141,24 @@ public class TransactionController {
                         .build();
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/insights")
+    @Operation(
+            summary = "Get spending insights",
+            description = "Provides spending analytics for the authenticated user's current month expenses."
+    )
+    public ResponseEntity<ApiResponse<SpendingInsightsResponse>> getSpendingInsights() {
+
+        SpendingInsightsResponse response =
+                transactionService.getSpendingInsights();
+
+        return ResponseEntity.ok(
+                ApiResponse.<SpendingInsightsResponse>builder()
+                        .success(true)
+                        .message("Spending insights retrieved successfully.")
+                        .data(response)
+                        .build()
+        );
     }
 }

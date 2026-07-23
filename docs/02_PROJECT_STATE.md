@@ -423,7 +423,24 @@ Features:
 - Swagger tested
 - Boundary tested
 - Edge cases verified
+
+## Sprint 5.6 – Spending Insights
+
+Status: ✅ Completed
+
+Features:
+- Monthly spending analytics
+- Highest spending category
+- Lowest spending category
+- Average daily expense
+- Category percentage calculation
+- Insight message generation
+- Current month expense analysis
+- Swagger tested
+- Edge cases verified
+
 # Documentation Status
+
 
 | Document | Status |
 |----------|--------|

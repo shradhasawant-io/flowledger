@@ -98,6 +98,21 @@ ORDER BY SUM(t.amount) DESC
             @Param("endDate") LocalDateTime endDate
     );
 
+    @Query("""
+SELECT t
+FROM Transaction t
+WHERE t.user = :user
+  AND t.type = :type
+  AND t.transactionTimestamp BETWEEN :startDate AND :endDate
+ORDER BY t.transactionTimestamp ASC
+""")
+    List<Transaction> findTransactionsByUserAndTypeAndDateRange(
+            @Param("user") User user,
+            @Param("type") TransactionType type,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate
+    );
+
     List<Transaction> findTop5ByUserOrderByTransactionTimestampDesc(User user);
 
     List<Transaction> findByUser(User user);

@@ -507,7 +507,20 @@ Technical Debt (Deferred)
 • Shared analytics helper extraction
 
 Status: Deferred to "Budget Module Refactoring Sprint".
+
+## Sprint 5.6 – Spending Insights
+
+Completed:
+- Added SpendingInsightsResponse
+- Added getSpendingInsights()
+- Added monthly transaction analytics engine
+- Added category aggregation
+- Added insight generation
+- Added spending insights endpoint
+- Swagger testing completed
+- Edge cases verified
 # Upcoming Release
+
 
 Version
 
