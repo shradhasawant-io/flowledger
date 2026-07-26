@@ -519,19 +519,18 @@ Completed:
 - Added spending insights endpoint
 - Swagger testing completed
 - Edge cases verified
-# Upcoming Release
-
-
-Version
-
+ 
 v1.4.0
 
-Planned Features
+Sprint 6.0 – Recurring Transactions
 
-- Budget Health Score
-- Budget Forecast
-- Spending Insights
-
+Features:
+- Added recurring transaction module
+- Added scheduler using @Scheduled
+- Automatic transaction generation
+- Frequency-based next execution calculation
+- Full CRUD APIs
+- Swagger tested
 Status
 
 🟡 In Development

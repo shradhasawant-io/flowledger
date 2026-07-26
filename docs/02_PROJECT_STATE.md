@@ -439,6 +439,15 @@ Features:
 - Swagger tested
 - Edge cases verified
 
+Version: v1.4.0
+
+Completed:
+- Recurring Transaction CRUD
+- Automatic Scheduler
+- Daily/Weekly/Monthly/Yearly Recurrence
+- Automatic Transaction Generation
+- Payment Method Support
+- Scheduler Logging
 # Documentation Status
 
 
