@@ -1,7 +1,11 @@
 package com.flowledger.scheduler;
 
+import com.flowledger.entity.BillReminder;
 import com.flowledger.entity.RecurringTransaction;
 import com.flowledger.entity.Transaction;
+import com.flowledger.enums.ReminderPriority;
+import com.flowledger.enums.ReminderStatus;
+import com.flowledger.repository.BillReminderRepository;
 import com.flowledger.repository.RecurringTransactionRepository;
 import com.flowledger.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Component
@@ -23,7 +28,65 @@ public class RecurringTransactionScheduler {
 
     private final TransactionRepository transactionRepository;
 
-    @Scheduled(cron = "0 0 0 * * *")
+    private final BillReminderRepository billReminderRepository;
+
+    private void generateBillReminder(
+            RecurringTransaction recurringTransaction) {
+
+        boolean alreadyExists =
+                billReminderRepository
+                        .existsByRecurringTransactionAndDueDate(
+                                recurringTransaction,
+                                recurringTransaction.getNextExecutionDate()
+                        );
+
+        if (alreadyExists) {
+            return;
+        }
+
+        long daysRemaining =
+                ChronoUnit.DAYS.between(
+                        LocalDate.now(),
+                        recurringTransaction.getNextExecutionDate()
+                );
+
+        if (daysRemaining < 0 || daysRemaining > 7) {
+            return;
+        }
+
+        ReminderPriority priority;
+
+        if (daysRemaining == 0) {
+            priority = ReminderPriority.CRITICAL;
+        } else if (daysRemaining <= 2) {
+            priority = ReminderPriority.HIGH;
+        } else if (daysRemaining <= 6) {
+            priority = ReminderPriority.MEDIUM;
+        } else {
+            priority = ReminderPriority.LOW;
+        }
+
+        BillReminder billReminder = BillReminder.builder()
+                .title(recurringTransaction.getTitle())
+                .amount(recurringTransaction.getAmount())
+                .category(recurringTransaction.getCategory())
+                .dueDate(recurringTransaction.getNextExecutionDate())
+                .priority(priority)
+                .status(ReminderStatus.PENDING)
+                .notificationSent(false)
+                .recurringTransaction(recurringTransaction)
+                .user(recurringTransaction.getUser())
+                .build();
+
+        billReminderRepository.save(billReminder);
+
+        log.info(
+                "Generated bill reminder for: {}",
+                recurringTransaction.getTitle()
+        );
+    }
+
+    @Scheduled(fixedRate = 10000)
     @Transactional
     public void processRecurringTransactions() {
 
@@ -51,6 +114,8 @@ public class RecurringTransactionScheduler {
 
     private void processRecurringTransaction(
             RecurringTransaction recurringTransaction) {
+
+        generateBillReminder(recurringTransaction);
 
         Transaction transaction =
                 createTransaction(recurringTransaction);

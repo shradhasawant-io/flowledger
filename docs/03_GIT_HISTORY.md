@@ -519,21 +519,35 @@ Completed:
 - Added spending insights endpoint
 - Swagger testing completed
 - Edge cases verified
- 
-v1.4.0
 
-Sprint 6.0 – Recurring Transactions
+
+## v1.4.0
+
+### Sprint 6.0 – Recurring Transactions
 
 Features:
-- Added recurring transaction module
-- Added scheduler using @Scheduled
+- Added recurring transaction entity
+- Added recurring transaction CRUD APIs
+- Added scheduler using Spring @Scheduled
 - Automatic transaction generation
 - Frequency-based next execution calculation
-- Full CRUD APIs
-- Swagger tested
-Status
+- Payment method support
+- Scheduler refactored into helper methods
+- Full Swagger testing completed
 
-🟡 In Development
+## v1.6.0
+
+### Sprint 6.1 – Bill Reminder Engine
+
+Features:
+- Added BillReminder domain
+- Reminder priority engine
+- Reminder status management
+- Automatic reminder generation
+- Scheduler integration
+- Duplicate reminder prevention
+- Reminder APIs
+- Swagger tested
 
 ---
 

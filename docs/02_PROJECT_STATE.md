@@ -448,6 +448,39 @@ Completed:
 - Automatic Transaction Generation
 - Payment Method Support
 - Scheduler Logging
+
+## Version: v1.6.0
+
+### Completed Modules
+
+- Authentication
+- Transaction Management
+- Dashboard Analytics
+- Budget Management
+- Spending Insights
+- Recurring Transactions
+- Bill Reminder Engine
+
+### Current Status
+
+Stable Release
+## Version: v1
+
+### Completed Modules
+
+- Authentication
+- Transaction Management
+- Dashboard Analytics
+- Budget Management
+- Budget Forecast
+- Budget Health Score
+- Spending Insights
+- Recurring Transactions
+- Automated Scheduler
+
+### Current Status
+
+Stable Release
 # Documentation Status
 
 
