@@ -19,4 +19,6 @@ public class DashboardSummaryResponse {
 
     private Long totalTransactions;
 
+    private DashboardNotificationsResponse notifications;
+
 }

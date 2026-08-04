@@ -461,6 +461,22 @@ Completed:
 - Recurring Transactions
 - Bill Reminder Engine
 
+## Version: v1.7.0
+
+### Completed Modules
+
+- Authentication
+- Transaction Management
+- Dashboard Analytics
+- Budget Management
+- Spending Insights
+- Recurring Transactions
+- Bill Reminder Engine
+- Notification Center
+
+### Current Status
+
+Stable Release
 ### Current Status
 
 Stable Release

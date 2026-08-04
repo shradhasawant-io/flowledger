@@ -86,7 +86,7 @@ public class RecurringTransactionScheduler {
         );
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void processRecurringTransactions() {
 

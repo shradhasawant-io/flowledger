@@ -1,9 +1,7 @@
 package com.flowledger.service.impl;
 
 import com.flowledger.dto.projection.MonthlySummaryProjection;
-import com.flowledger.dto.response.DashboardSummaryResponse;
-import com.flowledger.dto.response.ExpenseCategorySummaryResponse;
-import com.flowledger.dto.response.MonthlySummaryResponse;
+import com.flowledger.dto.response.*;
 import com.flowledger.dto.response.dashboard.HighestExpenseResponse;
 import com.flowledger.dto.response.dashboard.HighestIncomeResponse;
 import com.flowledger.dto.response.dashboard.RecentTransactionResponse;
@@ -14,6 +12,7 @@ import com.flowledger.exception.ResourceNotFoundException;
 import com.flowledger.repository.TransactionRepository;
 import com.flowledger.service.AuthenticatedUserService;
 import com.flowledger.service.DashboardService;
+import com.flowledger.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +30,7 @@ public class DashboardServiceImpl implements DashboardService {
 
     private final TransactionRepository transactionRepository;
     private final AuthenticatedUserService authenticatedUserService;
+    private final NotificationService notificationService;
 
     @Override
     @Transactional(readOnly = true)
@@ -46,11 +46,52 @@ public class DashboardServiceImpl implements DashboardService {
 
         BigDecimal currentBalance = totalIncome.subtract(totalExpense);
 
+        NotificationCountResponse unreadCount =
+                notificationService.getUnreadCount();
+
+        List<NotificationResponse> notifications =
+                notificationService.getNotifications();
+
+        List<DashboardNotificationResponse>
+                dashboardNotifications =
+                notifications.stream()
+                        .limit(5)
+                        .map(notification ->
+                                DashboardNotificationResponse
+                                        .builder()
+                                        .id(notification.getId())
+                                        .title(notification.getTitle())
+                                        .dueDate(notification.getDueDate())
+                                        .daysRemaining(
+                                                notification.getDaysRemaining()
+                                        )
+                                        .priority(
+                                                notification.getPriority()
+                                        )
+                                        .build()
+                        )
+                        .toList();
+
+        DashboardNotificationsResponse
+                dashboardNotificationsResponse =
+                DashboardNotificationsResponse
+                        .builder()
+                        .unreadCount(
+                                unreadCount.getUnreadCount()
+                        )
+                        .notifications(
+                                dashboardNotifications
+                        )
+                        .build();
+
+
+
         return DashboardSummaryResponse.builder()
                 .totalIncome(totalIncome)
                 .totalExpense(totalExpense)
                 .currentBalance(currentBalance)
                 .totalTransactions(totalTransactions)
+                .notifications(dashboardNotificationsResponse)
                 .build();
     }
 

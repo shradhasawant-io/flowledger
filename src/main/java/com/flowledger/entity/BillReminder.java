@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bill_reminders")
@@ -52,4 +53,7 @@ public class BillReminder extends BaseEntity {
 
     @Column(nullable = false)
     private Boolean notificationSent;
+
+    @Column
+    private LocalDateTime readAt;
 }
