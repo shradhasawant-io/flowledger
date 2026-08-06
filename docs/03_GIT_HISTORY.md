@@ -550,6 +550,98 @@ Features:
 - Swagger tested
 
 ---
+# v1.8.0 — Financial Streaks
+
+Date:
+<today>
+
+## Features
+
+### Financial Streaks Module
+
+Implemented a new analytics module for tracking user financial habits.
+
+#### Expense Logging Streak
+
+- Current Logging Streak
+- Longest Logging Streak
+
+#### No-Spend Streak
+
+- Current No-Spend Streak
+- Longest No-Spend Streak
+
+#### Motivation Engine
+
+Added intelligent motivational messages based on user streaks.
+
+---
+
+## Dashboard
+
+Integrated Financial Streaks into Dashboard Summary.
+
+Added:
+
+- DashboardFinancialStreakResponse
+
+Dashboard now displays:
+
+- Current Logging Streak
+- Current No-Spend Streak
+- Motivation Message
+
+---
+
+## REST API
+
+Added:
+
+GET /api/v1/streaks
+
+Protected with JWT authentication.
+
+---
+
+## Refactoring
+
+Refactored FinancialStreakServiceImpl into smaller private methods:
+
+- calculateCurrentLoggingStreak()
+- calculateLongestLoggingStreak()
+- calculateCurrentNoSpendStreak()
+- calculateLongestNoSpendStreak()
+- generateMotivationalMessage()
+
+Improved readability and maintainability.
+
+---
+
+## Testing
+
+Completed Swagger testing for:
+
+- Financial Streak API
+- Dashboard API
+
+Verified:
+
+- Current streak calculations
+- Longest streak calculations
+- Empty transaction history
+- Income-only days
+- Expense days
+- Dashboard integration
+
+All tests passed successfully.
+
+---
+
+## Release
+
+Version:
+
+v1.8.0
 
 # Release Checklist
 

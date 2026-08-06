@@ -474,6 +474,120 @@ Completed:
 - Bill Reminder Engine
 - Notification Center
 
+# Sprint 6.3 – Financial Streaks
+
+## Version
+v1.8.0
+
+## Status
+✅ Completed
+
+## Objective
+
+Introduce a Financial Streaks module that encourages healthy financial habits by analyzing historical transaction data. Unlike previous modules, streaks are derived analytics and are calculated dynamically from the transaction history without introducing additional database tables.
+
+---
+
+## Features Implemented
+
+### Expense Logging Streak
+
+- Current Logging Streak
+- Longest Logging Streak
+
+A logging streak represents consecutive days where the user recorded at least one transaction.
+
+---
+
+### No-Spend Streak
+
+- Current No-Spend Streak
+- Longest No-Spend Streak
+
+A no-spend day is a day containing no expense transactions. Income transactions do not break the streak.
+
+---
+
+### Motivational Insights
+
+The backend generates contextual motivational messages based on the user's current streaks.
+
+Examples:
+
+- 🔥 Amazing! You're on a 30+ day expense logging streak!
+- 👏 Great job! Keep your expense logging streak alive.
+- 💰 Fantastic! You're maintaining an impressive no-spend streak.
+- 📈 Keep tracking your expenses every day.
+- Start logging transactions today to build your first streak!
+
+---
+
+## REST APIs
+
+### Financial Streaks
+
+GET /api/v1/streaks
+
+Returns:
+
+- Current Logging Streak
+- Longest Logging Streak
+- Current No-Spend Streak
+- Longest No-Spend Streak
+- Motivational Message
+
+---
+
+## Dashboard Integration
+
+Dashboard Summary now includes:
+
+- Current Logging Streak
+- Current No-Spend Streak
+- Motivational Message
+
+The dashboard reuses FinancialStreakService instead of duplicating business logic.
+
+---
+
+## Architecture
+
+Transaction History
+│
+▼
+FinancialStreakService
+│
+├── Current Logging Streak
+├── Longest Logging Streak
+├── Current No-Spend Streak
+├── Longest No-Spend Streak
+└── Motivational Message
+│
+▼
+FinancialStreakResponse
+│
+▼
+Dashboard Integration
+
+---
+
+## Design Decisions
+
+- No database entity introduced.
+- No repository dedicated to streaks.
+- No mapper required.
+- Analytics are calculated dynamically.
+- Dashboard consumes FinancialStreakService.
+- Transaction history is loaded once and reused for all calculations.
+
+---
+
+## Module Status
+
+✅ Production Ready
+
+All Swagger tests passed successfully.
+
 ### Current Status
 
 Stable Release

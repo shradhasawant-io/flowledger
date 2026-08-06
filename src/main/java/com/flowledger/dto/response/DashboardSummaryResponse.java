@@ -21,4 +21,6 @@ public class DashboardSummaryResponse {
 
     private DashboardNotificationsResponse notifications;
 
+    private DashboardFinancialStreakResponse financialStreaks;
+
 }

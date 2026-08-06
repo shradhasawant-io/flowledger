@@ -12,6 +12,7 @@ import com.flowledger.exception.ResourceNotFoundException;
 import com.flowledger.repository.TransactionRepository;
 import com.flowledger.service.AuthenticatedUserService;
 import com.flowledger.service.DashboardService;
+import com.flowledger.service.FinancialStreakService;
 import com.flowledger.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class DashboardServiceImpl implements DashboardService {
     private final TransactionRepository transactionRepository;
     private final AuthenticatedUserService authenticatedUserService;
     private final NotificationService notificationService;
+    private final FinancialStreakService financialStreakService;
 
     @Override
     @Transactional(readOnly = true)
@@ -45,6 +47,18 @@ public class DashboardServiceImpl implements DashboardService {
         Long totalTransactions = transactionRepository.countByUser(currentUser);
 
         BigDecimal currentBalance = totalIncome.subtract(totalExpense);
+
+        FinancialStreakResponse streakResponse =
+                financialStreakService.getFinancialStreaks();
+        DashboardFinancialStreakResponse dashboardStreaks =
+                DashboardFinancialStreakResponse.builder()
+                        .currentLoggingStreak(
+                                streakResponse.getCurrentLoggingStreak())
+                        .currentNoSpendStreak(
+                                streakResponse.getCurrentNoSpendStreak())
+                        .motivationalMessage(
+                                streakResponse.getMotivationalMessage())
+                        .build();
 
         NotificationCountResponse unreadCount =
                 notificationService.getUnreadCount();
@@ -84,14 +98,13 @@ public class DashboardServiceImpl implements DashboardService {
                         )
                         .build();
 
-
-
         return DashboardSummaryResponse.builder()
                 .totalIncome(totalIncome)
                 .totalExpense(totalExpense)
                 .currentBalance(currentBalance)
                 .totalTransactions(totalTransactions)
                 .notifications(dashboardNotificationsResponse)
+                .financialStreaks(dashboardStreaks)
                 .build();
     }
 
