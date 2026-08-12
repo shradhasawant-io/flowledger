@@ -657,7 +657,72 @@ Before creating a Git tag:
 - GitHub updated
 
 ---
+## Sprint 6.4 – Excel & PDF Export
 
+Status: ✅ Completed
+
+### Export Engine
+
+Added authenticated financial report export functionality.
+
+### Supported Reports
+
+- Dashboard
+- Transactions
+- Monthly Summary
+
+### Supported Formats
+
+- Excel
+- PDF
+
+### REST API
+
+GET /api/v1/export
+
+Query Parameters:
+
+- report
+- format
+
+### Dashboard Export
+
+- Dashboard Excel export
+- Dashboard PDF export
+- Financial summary
+- Notifications
+- Financial streaks
+
+### Transaction Export
+
+- Transaction Excel export
+- Transaction PDF export
+- Currency formatting
+- Date/time formatting
+
+### Monthly Summary Export
+
+- Monthly summary Excel export
+- Monthly summary PDF export
+- Income
+- Expense
+- Saving
+- Saving Rate
+- Status
+
+### Security
+
+- JWT authentication
+- bearerAuth OpenAPI security requirement
+
+### Testing
+
+- Six Swagger export combinations verified
+- Generated Excel files validated
+- Generated PDF files validated
+- Important edge cases verified
+
+Status: ✅ Completed
 # Notes
 
 Every new Git tag must be added to this document immediately after release.

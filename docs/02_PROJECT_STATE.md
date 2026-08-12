@@ -582,6 +582,188 @@ Dashboard Integration
 
 ---
 
+# Sprint 6.4 – Export Engine
+
+## Status
+
+✅ Completed
+
+## Objective
+
+Introduce an authenticated export engine for generating financial reports in Excel and PDF formats.
+
+---
+
+## Features Implemented
+
+### Export Reports
+
+- Dashboard
+- Transactions
+- Monthly Summary
+
+### Export Formats
+
+- Excel (.xlsx)
+- PDF (.pdf)
+
+---
+
+## Dashboard Export
+
+### Excel
+
+Includes:
+
+- Financial Summary
+- Notifications
+- Financial Streaks
+
+### PDF
+
+Includes:
+
+- Financial Summary
+- Notifications
+- Financial Streaks
+
+---
+
+## Transactions Export
+
+### Excel
+
+Includes:
+
+- Transaction ID
+- Title
+- Amount
+- Transaction Type
+- Category
+- Payment Method
+- Transaction Timestamp
+- Notes
+
+Additional formatting:
+
+- Currency formatting
+- Date/time formatting
+
+### PDF
+
+Includes transaction history with financial transaction details.
+
+---
+
+## Monthly Summary Export
+
+### Excel
+
+Includes:
+
+- Year
+- Month
+- Income
+- Expense
+- Saving
+- Saving Rate
+- Status
+
+### PDF
+
+Includes monthly financial summary data.
+
+---
+
+## REST API
+
+GET /api/v1/export
+
+Query Parameters:
+
+- report
+- format
+
+Supported reports:
+
+- DASHBOARD
+- TRANSACTIONS
+- MONTHLY_SUMMARY
+
+Supported formats:
+
+- EXCEL
+- PDF
+
+---
+
+## Authentication
+
+The export API is protected using JWT authentication.
+
+Swagger/OpenAPI uses the `bearerAuth` security scheme.
+
+---
+
+## Architecture
+
+ExportController
+│
+▼
+ExportService
+│
+├── ExcelExportService
+│
+└── PdfExportService
+
+The export engine follows the existing layered architecture and keeps export-specific business logic outside the controller.
+
+---
+
+## Testing
+
+### Swagger/API Testing
+
+Completed successfully for all six report/format combinations:
+
+- Dashboard → Excel ✅
+- Dashboard → PDF ✅
+- Transactions → Excel ✅
+- Transactions → PDF ✅
+- Monthly Summary → Excel ✅
+- Monthly Summary → PDF ✅
+
+### Edge Cases
+
+Important API edge cases verified:
+
+- Missing required parameters
+- Invalid report/format values
+- Authentication-related requests
+
+All required edge-case tests passed.
+
+---
+
+## File Validation
+
+Generated files were successfully downloaded and opened.
+
+- Excel workbooks ✅
+- PDF documents ✅
+
+---
+
+## Known Minor Issue
+
+Transaction PDF export has minor column-width/text-wrapping issues for long category values.
+
+Status:
+
+Deferred
+
+This does not prevent the export from functioning correctly.
+
 ## Module Status
 
 ✅ Production Ready
